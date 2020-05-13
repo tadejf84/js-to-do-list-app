@@ -6,11 +6,13 @@ const desc = document.querySelector('#desc');
 const person = document.querySelector('#person');
 const list = document.querySelector('#todo-list');
 const messageHolder = document.querySelector('#message-holder');
-const archiveList = document.getElementById('archive-list');
+const archiveList = document.querySelector('#archive-list');
 
-/*
-* Task constructor class
-*/
+
+/**
+ * Class Task
+ * 
+ */
 class Task {
 	constructor(date, title, desc, person, id) {
 		this.date = date;
@@ -21,11 +23,18 @@ class Task {
 	}
 }
 
-/*
-* Task UI class
-*/
+
+/**
+ * Class TaskUI
+ * 
+ * Handle UI
+ */
 class TaskUI {
-	// display archive and active tasks on init
+
+	/**
+	 * Display archive and active tasks on init
+	 * 
+	 */
 	static displayListsOnInit() {
 		const tasks = Store.getTasks();
 		const archive = Store.getTasksFromArchive();
@@ -33,33 +42,30 @@ class TaskUI {
 		archive.forEach((task) => TaskUI.addTask(task, archiveList));
 	}
 
-	// add task to list
+
+	/**
+	 * Add task to list
+	 * 
+	 * @param {object} task 
+	 * @param {object} container 
+	 */
 	static addTask(task, container) {
 		const row = document.createElement('tr');
-
-		// append to active tasks
-		if (container.classList.contains('active-tasks')) {
-			row.innerHTML = ` 
-            <td class="taskID">${task.id}</td>
-            <td>${task.date}</td>
-            <td>${task.person}</td>
-            <td>${task.title}</td>
-            <td>${task.desc}</td>
-            <td><button class="btn btn-archive"></button><button class="btn btn-delete red darken-1"></button></td>`;
-		} else {
-			// append to archived tasks
-			row.innerHTML = ` 
-            <td class="taskID">${task.id}</td>
-            <td>${task.date}</td>
-            <td>${task.person}</td>
-            <td>${task.title}</td>
-            <td>${task.desc}</td>
-            <td><button class="btn btn-delete-archive red darken-1"></button></td>`;
-		}
+		row.setAttribute('data-id', task.id);
+		row.innerHTML = `<td class="taskID">${task.id}</td>
+						 <td>${task.date}</td>
+						 <td>${task.person}</td>
+						 <td>${task.title}</td>
+						 <td>${task.desc}</td>
+						 <td><button class="btn ${container.classList.contains('active-tasks') ? 'btn-archive' : 'btn-delete-archive red darken-1'}"></button></td>`;
 		container.appendChild(row);
 	}
 
-	// clear fields values
+
+	/**
+	 * Clear field values
+	 * 
+	 */
 	static clearFields() {
 		date.value = '';
 		title.value = '';
@@ -67,20 +73,32 @@ class TaskUI {
 		person.value = '';
 	}
 
-	// show alert messages
+
+	/**
+	 * Show alert messages
+	 * 
+	 * @param {string} message 
+	 * @param {string} className 
+	 */
 	static showAlert(message, className) {
 		const p = document.createElement('p');
 		p.className = `alert-msg ${className}`;
 		p.appendChild(document.createTextNode(message));
 		messageHolder.appendChild(p);
 
-		// hide alert
+		// Hide alert
 		setTimeout(() => {
 			document.querySelector('.alert-msg').remove();
 		}, 3000);
 	}
 
-	// delete task from list
+
+	/**
+	 * Delete task from archived list
+	 * 
+	 * @param {object} el 
+	 * @param {string} btn 
+	 */
 	static deleteTask(el, btn) {
 		if (el.classList.contains(btn)) {
 			el.parentElement.parentElement.remove();
@@ -88,46 +106,55 @@ class TaskUI {
 	}
 }
 
-/*
-* data storage class
-*/
+
+/**
+ * Class Store
+ * 
+ * Handles data storage - to local storage
+ */
 class Store {
-	// get active tasks from storage
+
+	/**
+	 * Get active tasks from storage
+	 * 
+	 * @returns {object} tasks
+	 */
 	static getTasks() {
-		let tasks;
-		if (!localStorage.getItem('tasks')) {
-			tasks = [];
-		} else {
-			tasks = JSON.parse(localStorage.getItem('tasks'));
-		}
-		return tasks;
+		return JSON.parse(localStorage.getItem('tasks')) ?? [];
 	}
 
-	// get archived tasks from storage
+
+	/**
+	 * Get archived tasks from storage
+	 * 
+	 * @returns {object} tasks
+	 */
 	static getTasksFromArchive() {
-		let tasks;
-		if (!localStorage.getItem('archive')) {
-			tasks = [];
-		} else {
-			tasks = JSON.parse(localStorage.getItem('archive'));
-		}
-		return tasks;
+		return JSON.parse(localStorage.getItem('archive')) ?? [];
 	}
 
-	// add tasks to storage
+
+	/**
+	 * Add task to storage
+	 * 
+	 * @param {object} task 
+	 */
 	static addTasks(task) {
 		let tasks = Store.getTasks();
 		tasks.push(task);
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 	}
 
-	// remove task from storage
+
+	/**
+	 * Remove task from storage
+	 * 
+	 * @param {string} id 
+	 */
 	static removeTask(id) {
 		let tasks = Store.getTasks();
 		tasks.forEach((task, index) => {
-			if (task.id == id) {
-				tasks.splice(index, 1);
-			}
+			if (task.id == id) tasks.splice(index, 1);
 		});
 		localStorage.setItem('tasks', JSON.stringify(tasks));
 	}
@@ -143,7 +170,12 @@ class Store {
 		localStorage.setItem('archive', JSON.stringify(archived));
 	}
 
-	// move task to archive storage
+
+	/**
+	 * Move task to archive
+	 * 
+	 * @param {string} id 
+	 */
 	static moveTaskToArchive(id) {
 		let tasks = Store.getTasks();
 		let archived = Store.getTasksFromArchive();
@@ -156,118 +188,112 @@ class Store {
 		});
 	}
 
-	// set id of the last task in storage
+
+	/**
+	 * Set id of the last task in storage
+	 * 
+	 * @param {string} id 
+	 */
 	static setLastID(id) {
 		localStorage.setItem('taskID', JSON.stringify(id));
 	}
 
-	// get last ID
+
+	/**
+	 * Get last task id
+	 * 
+	 * @returns {string} id
+	 */
 	static getLastID() {
 		return JSON.parse(localStorage.getItem('taskID'));
 	}
 }
 
-/*
-* load event - fetch all data for to-do list and archive
-*/
+
+// show all data on load
 document.addEventListener('DOMContentLoaded', TaskUI.displayListsOnInit);
 
-/*
-* click event - add task to to-do list
-*/
-// fetch task ID
-let getID = Store.getLastID();
-let currentTaskID;
-if (getID !== null) {
-	currentTaskID = getID + 1;
-} else {
-	currentTaskID = 0;
-}
+// add task to list on click
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
 
-	// get values from inputs
+	// get last task ID from storage
+	let currentTaskID = (+Store.getLastID() + 1) ?? 0;
+
+	// Get values from form inputs
 	const dateVal = document.querySelector('#date').value;
 	const titleVal = document.querySelector('#title').value;
 	const descVal = document.querySelector('#desc').value;
 	const personVal = document.querySelector('#person').value;
 
-	// input validation
+	// Input validation
 	if (!dateVal || !titleVal || !descVal || !personVal) {
 		TaskUI.showAlert('Please fill all fields!', 'error');
 	} else {
-		// new task instance
+		// New task instance
 		const task = new Task(dateVal, titleVal, descVal, personVal, currentTaskID);
 
-		// add to UI
+		// Add to UI
 		TaskUI.addTask(task, list);
 
-		// add task to storage
+		// Add task to storage
 		Store.addTasks(task);
 
-		// clear fields
+		// Clear fields
 		TaskUI.clearFields();
 
-		// show success message
+		// Show success message
 		TaskUI.showAlert('Task added successfully!', 'success');
 
-		// increase task ID
+		// Increase task ID
 		Store.setLastID(currentTaskID);
 		currentTaskID++;
 	}
 });
 
-/*
-* click event - remove a task from to-do list or move it to archive
-*/
+// remove a task from to-do list or move it to archive on click
 list.addEventListener('click', (e) => {
 	const parent = e.target.parentElement;
+	const taskID = parent.parentElement.getAttribute('data-id');
 
 	if (e.target.classList.contains('btn-delete')) {
-		// delete task from UI
+
+		// Delete task from UI
 		TaskUI.deleteTask(e.target, 'btn-delete');
 
-		// delete task from storage
-		const taskID =
-			parent.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling
-				.previousElementSibling.textContent;
+		// Delete task from storage
 		Store.removeTask(taskID);
 
-		// show success message
+		// Show success message
 		TaskUI.showAlert('Task removed successfully!', 'success');
-	} else if (e.target.classList.contains('btn-archive')) {
-		// delete task from UI
-		TaskUI.deleteTask(e.target, 'btn-archive');
-		const taskID =
-			parent.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling
-				.previousElementSibling.textContent;
 
-		// move task to archive storage
+	} else if (e.target.classList.contains('btn-archive')) {
+
+		// Delete task from UI
+		TaskUI.deleteTask(e.target, 'btn-archive');
+
+		// Move task to archive storage
 		Store.moveTaskToArchive(taskID);
 
-		// delete task from active tasks storage
+		// Delete task from active tasks storage
 		Store.removeTask(taskID);
 
-		// show success message
+		// Show success message
 		TaskUI.showAlert('Task completed!', 'success');
 	}
 });
 
-/*
-* click event - remove task from archive
-*/
+// remove task from archive on click
 archiveList.addEventListener('click', (e) => {
 	const parent = e.target.parentElement;
+	const taskID = parent.parentElement.getAttribute('data-id');
 
-	// delete task from archive UI
+	// Delete task from archive UI
 	TaskUI.deleteTask(e.target, 'btn-delete-archive');
 
-	// delete task from storage
-	const taskID =
-		parent.previousElementSibling.previousElementSibling.previousElementSibling.previousElementSibling
-			.previousElementSibling.textContent;
+	// Delete task from storage
 	Store.removeTaskFromArchive(taskID);
 
-	// show success message
+	// Show success message
 	TaskUI.showAlert('Task removed successfully!', 'success');
 });
