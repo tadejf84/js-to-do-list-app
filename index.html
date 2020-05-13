@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My To-Do List App</title>
+
+    <!-- materielize css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- material icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- my styles -->
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+    <header class="header teal lighten-1">
+        <h1 class="white-text"><i class="large material-icons">check_box</i>My To-Do List</h1>
+    </header>
+
+    <main class="wrapper">
+
+        <div class="container custom-container">
+
+            <div class="row">
+                <div class="col s12">
+                    <ul class="tabs">
+                        <li class="tab col s6"><a class="active" href="#tasks-active">To-Do List</a></li>
+                        <li class="tab col s6"><a href="#tasks-archive">Completed</a></li>
+                    </ul>
+                </div>
+
+                <div id="tasks-active" class="col s12 tab-content">
+                    
+                    <p class="flow-text">Add your tasks by filling out the fields and clicking the "Add Task" button for confirmation. Once added, you can mark it as done or delete it.</p>
+
+                    <form id="todo-form">
+
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <i class="material-icons prefix">date_range</i>
+                                <label for="date">Due date</label>
+                                <input type="text" name="" id="date" class="datepicker">
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <i class="material-icons prefix">person</i>
+                                <label for="person">Assign To</label>
+                                <input type="text" name="" id="person">
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">mode_edit</i>
+                                <label for="title">Task Name</label>
+                                <input type="text" name="" id="title">
+                            </div>
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix">mode_edit</i>
+                                <label for="desc">Task Description</label>
+                                <textarea name="" id="desc" class="materialize-textarea"></textarea>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary waves-effect wawes-light" type="submit"><i class="material-icons right">add</i>Add task</button>
+                    </form>
+
+                    <div id="message-holder"></div>
+
+                    <table class="highlight responsive-table">
+                        <thead>
+                            <th>ID</th>
+                            <th>Due date</th>
+                            <th>Assigned To</th>
+                            <th>Task Name</th>
+                            <th>Task Description</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody id="todo-list" class="task-list active-tasks"></tbody>
+                    </table>
+
+                </div>
+
+                <div id="tasks-archive" class="col s12 tab-content">
+                    <p class="flow-text">This is a list of the tasks you have marked as done. You can remove a specific task from the list by clicking on the red button.</p>
+                    <table class="highlight responsive-table">
+                        <thead>
+                            <th>ID</th>
+                            <th>Due date</th>
+                            <th>Assigned To</th>
+                            <th>Task Name</th>
+                            <th>Task Description</th>
+                            <th>Action</th>
+                        </thead>
+                        <tbody id="archive-list" class="task-list archived-tasks"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    
+    <!-- materialize script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="main.js"></script>
+    <!-- app script -->
+    <script src="app.js"></script>
+</body>
+</html>

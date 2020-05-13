@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700');
+
+/*
+* global styles
+*/
+body {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+}
+
+.custom-container {
+    max-width: 800px;
+}
+
+
+/*
+* header
+*/
+.header {
+    padding: 2rem 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 3.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header h1 i {
+   margin-right: 24px;
+   font-size: 4.3rem;
+}
+
+main {
+    padding: 4rem 0;
+}
+
+
+/*
+* tabs styling
+*/
+.tabs .tab a, .tabs .tab.active a {
+    color: #26a69a !important;
+    background: none !important;
+    font-size: 1.5rem;
+}
+.tabs .indicator {
+    background: #26a69a !important;
+}
+
+.tab-content {
+    padding: 1rem 0;
+}
+
+
+/*
+* to-do form
+*/
+#todo-form {
+    margin-bottom: 2rem;
+}
+
+.alert-msg {
+    padding: 0.5rem 1rem;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.alert-msg.error {
+    background: #E53935;
+}
+
+.alert-msg.success {
+    background: #66bb6a;
+}
+
+
+/*
+* task list
+*/
+.btn-delete, .btn-archive, .btn-delete-archive {
+    margin-right: 16px;
+}
+
+.btn-archive::before, .btn-delete::before, .btn-delete-archive::before { 
+    font-family: "Material Icons"; 
+    font-size: 1.5rem;
+} 
+
+.btn-archive::before { 
+    content: "\E876"; 
+} 
+
+.btn-delete::before, .btn-delete-archive::before {  
+    content: '\e872'; 
+} 
+
+
+/*
+* mobile devices
+*/
+@media (max-width: 600px) {
+    .header {
+        padding: 1rem 0;
+    }
+
+    .header h1 {
+        font-size: 2.5rem;
+    }
+
+    .header h1 i {
+        font-size: 3rem;
+    }
+
+    main {
+        padding: 2rem 0;
+    }
+
+    .btn-archive, .btn-delete, .btn-delete-archive  {
+        display: block;
+        padding: 0 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .btn-archive::before, .btn-delete::before, .btn-delete-archive::before { 
+        font-size: 1.4rem;
+    } 
+}
