@@ -69,7 +69,7 @@ class TaskUI {
      * @param {object} task 
      * @param {object} container 
      */
-    static addTask(task, container) {
+    static addTask(task, container, taskAfterId = null) {
         const row = document.createElement('tr');
         row.setAttribute('data-id', task.id);
         row.innerHTML = `<td class="taskID">${task.id}</td>
@@ -78,7 +78,12 @@ class TaskUI {
                             <td>${task.title}</td>
                             <td>${task.desc}</td>
                             <td><button class="btn ${container.classList.contains('active-tasks') ? 'btn-archive' : 'btn-delete-archive red darken-1'}"></button></td>`;
-        container.appendChild(row);
+        if(taskAfterId !== null) {
+            const taskAfter = document.querySelector(`[data-id="${taskAfterId}"]`);
+            container.insertBefore(row, taskAfter);
+        } else {
+            container.appendChild(row);
+        }
     }
 
     /**
@@ -201,6 +206,7 @@ class Store {
      */
     static moveTaskToArchive(id) {
         let tasks = Store.getTasks();
+               tasks = Store.orderByDate(tasks);
         let archived = Store.getTasksFromArchive();
         tasks.forEach((task) => {
             if (task.id == id) {
@@ -243,6 +249,23 @@ class Store {
 
         return tasks;
     }
+
+    /**
+     * Get task after Id
+     * 
+     * To insert new task in correct spot
+     */
+    static getTaskAfterId(id) {
+        const tasks = Store.getTasks();
+        if(tasks.length === 0) return null;
+        const currentTaskIndex = tasks.findIndex(task => task.id === id);
+        if((currentTaskIndex + 1) !== tasks.length) {
+            const currentTaskId = tasks[currentTaskIndex + 1].id;
+            return currentTaskId;
+        } else {
+            return null;
+        }
+    }
 }
 
 // Show all data on load
@@ -268,11 +291,12 @@ form.addEventListener('submit', (e) => {
         // New task instance
         const task = new Task(dateVal, titleVal, descVal, personVal, currentTaskID);
 
-        // Add to UI
-        TaskUI.addTask(task, list);
-
         // Add task to storage
         Store.addTasks(task);
+        const taskAfterId = Store.getTaskAfterId(task.id);
+
+        // Add to UI
+        TaskUI.addTask(task, list, taskAfterId);
 
         // Clear fields
         TaskUI.clearFields();
