@@ -6,6 +6,7 @@ const desc = document.querySelector('#desc');
 const person = document.querySelector('#person');
 const list = document.querySelector('#todo-list');
 const messageHolder = document.querySelector('#message-holder');
+const archiveMessageHolder = document.querySelector('#archive-message-holder');
 const archiveList = document.querySelector('#archive-list');
 
 
@@ -30,6 +31,17 @@ class Task {
         this.desc = desc;
         this.person = person;
         this.id = id;
+        this.dateForOrder = this.convertDateFormat(this.date);
+    }
+
+    /**
+     * Convert date format
+     * 
+     * @param {string} date 
+     */
+    convertDateFormat(date) {
+        const dateArr = date.split(".");
+        return new Date(dateArr[2], dateArr[1] - 1, dateArr[0]);
     }
 }
 
@@ -86,11 +98,16 @@ class TaskUI {
      * @param {string} message 
      * @param {string} className 
      */
-    static showAlert(message, className) {
+    static showAlert(message, className, tab = 'tasks') {
         const p = document.createElement('p');
         p.className = `alert-msg ${className}`;
         p.appendChild(document.createTextNode(message));
-        messageHolder.appendChild(p);
+
+        if(tab === 'archive') {
+            archiveMessageHolder.appendChild(p);
+        } else {
+            messageHolder.appendChild(p);
+        }
 
         // Hide alert
         setTimeout(() => {
@@ -145,6 +162,7 @@ class Store {
     static addTasks(task) {
         let tasks = Store.getTasks();
         tasks.push(task);
+        tasks = Store.orderByDate(tasks);
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
@@ -210,6 +228,21 @@ class Store {
     static getLastID() {
         return JSON.parse(localStorage.getItem('taskID'));
     }
+
+    /**
+     * Order array by date
+     * 
+     * @param {array} tasks 
+     * 
+     * @returns {array} ordered tasks
+     */
+    static orderByDate(tasks) {
+        tasks.sort(function(a,b){
+            return new Date(a.dateForOrder) - new Date(b.dateForOrder);
+        });
+
+        return tasks;
+    }
 }
 
 // Show all data on load
@@ -267,7 +300,7 @@ list.addEventListener('click', (e) => {
         Store.removeTask(taskID);
 
         // Show success message
-        TaskUI.showAlert('Task removed successfully!', 'success');
+        TaskUI.showAlert('Task removed!', 'success');
 
     } else if (e.target.classList.contains('btn-archive')) {
 
@@ -297,5 +330,5 @@ archiveList.addEventListener('click', (e) => {
     Store.removeTaskFromArchive(taskID);
 
     // Show success message
-    TaskUI.showAlert('Task removed successfully!', 'success');
+    TaskUI.showAlert('Task removed!', 'success', 'archive');
 });
