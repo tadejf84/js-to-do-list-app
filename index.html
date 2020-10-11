@@ -42,7 +42,7 @@
                             <div class="input-field col s12 m6">
                                 <i class="material-icons prefix">date_range</i>
                                 <label for="date">Due date</label>
-                                <input type="text" name="" id="date" class="datepicker">
+                                <input type="text" name="" id="date" class="datepicker" tabindex="-1">
                             </div>
                             <div class="input-field col s12 m6">
                                 <i class="material-icons prefix">person</i>
@@ -82,6 +82,9 @@
 
                 <div id="tasks-archive" class="col s12 tab-content">
                     <p class="flow-text">This is a list of the tasks you have marked as done. You can remove a specific task from the list by clicking on the red button.</p>
+
+                    <div id="archive-message-holder"></div>
+
                     <table class="highlight responsive-table">
                         <thead>
                             <th>ID</th>
@@ -112,7 +115,7 @@
 
             // Date picker init
             const datePickerInit = M.Datepicker.init(datePickerEl, {
-                format: 'd. m. yyyy'
+                format: 'dd.mm.yyyy'
             });
 
             // Tabs init
