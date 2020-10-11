@@ -37,83 +37,78 @@ class Task {
 /**
  * Class TaskUI
  * 
- * Handle UI
  */
 class TaskUI {
 
-	/**
-	 * Display archive and active tasks on init
-	 * 
-	 */
-	static displayListsOnInit() {
-		const tasks = Store.getTasks();
-		const archive = Store.getTasksFromArchive();
-		tasks.forEach((task) => TaskUI.addTask(task, list));
-		archive.forEach((task) => TaskUI.addTask(task, archiveList));
-	}
+    /**
+     * Display archive and active tasks on init
+     * 
+     */
+    static displayListsOnInit() {
+        const tasks = Store.getTasks();
+        const archive = Store.getTasksFromArchive();
+        tasks.forEach((task) => TaskUI.addTask(task, list));
+        archive.forEach((task) => TaskUI.addTask(task, archiveList));
+    }
 
+    /**
+     * Add task to list
+     * 
+     * @param {object} task 
+     * @param {object} container 
+     */
+    static addTask(task, container) {
+        const row = document.createElement('tr');
+        row.setAttribute('data-id', task.id);
+        row.innerHTML = `<td class="taskID">${task.id}</td>
+                            <td>${task.date}</td>
+                            <td>${task.person}</td>
+                            <td>${task.title}</td>
+                            <td>${task.desc}</td>
+                            <td><button class="btn ${container.classList.contains('active-tasks') ? 'btn-archive' : 'btn-delete-archive red darken-1'}"></button></td>`;
+        container.appendChild(row);
+    }
 
-	/**
-	 * Add task to list
-	 * 
-	 * @param {object} task 
-	 * @param {object} container 
-	 */
-	static addTask(task, container) {
-		const row = document.createElement('tr');
-		row.setAttribute('data-id', task.id);
-		row.innerHTML = `<td class="taskID">${task.id}</td>
-						 <td>${task.date}</td>
-						 <td>${task.person}</td>
-						 <td>${task.title}</td>
-						 <td>${task.desc}</td>
-						 <td><button class="btn ${container.classList.contains('active-tasks') ? 'btn-archive' : 'btn-delete-archive red darken-1'}"></button></td>`;
-		container.appendChild(row);
-	}
+    /**
+     * Clear field values
+     * 
+     */
+    static clearFields() {
+        date.value = '';
+        title.value = '';
+        desc.value = '';
+        person.value = '';
+    }
 
+    /**
+     * Show alert messages
+     * 
+     * @param {string} message 
+     * @param {string} className 
+     */
+    static showAlert(message, className) {
+        const p = document.createElement('p');
+        p.className = `alert-msg ${className}`;
+        p.appendChild(document.createTextNode(message));
+        messageHolder.appendChild(p);
 
-	/**
-	 * Clear field values
-	 * 
-	 */
-	static clearFields() {
-		date.value = '';
-		title.value = '';
-		desc.value = '';
-		person.value = '';
-	}
+        // Hide alert
+        setTimeout(() => {
+            document.querySelector('.alert-msg').remove();
+        }, 3000);
+    }
 
-
-	/**
-	 * Show alert messages
-	 * 
-	 * @param {string} message 
-	 * @param {string} className 
-	 */
-	static showAlert(message, className) {
-		const p = document.createElement('p');
-		p.className = `alert-msg ${className}`;
-		p.appendChild(document.createTextNode(message));
-		messageHolder.appendChild(p);
-
-		// Hide alert
-		setTimeout(() => {
-			document.querySelector('.alert-msg').remove();
-		}, 3000);
-	}
-
-
-	/**
-	 * Delete task from archived list
-	 * 
-	 * @param {object} el 
-	 * @param {string} btn 
-	 */
-	static deleteTask(el, btn) {
-		if (el.classList.contains(btn)) {
-			el.parentElement.parentElement.remove();
-		}
-	}
+    /**
+     * Delete task from archived list
+     * 
+     * @param {object} el 
+     * @param {string} btn 
+     */
+    static deleteTask(el, btn) {
+        if (el.classList.contains(btn)) {
+            el.parentElement.parentElement.remove();
+        }
+    }
 }
 
 
