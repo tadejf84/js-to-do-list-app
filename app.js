@@ -14,13 +14,23 @@ const archiveList = document.querySelector('#archive-list');
  * 
  */
 class Task {
-	constructor(date, title, desc, person, id) {
-		this.date = date;
-		this.title = title;
-		this.desc = desc;
-		this.person = person;
-		this.id = id;
-	}
+
+    /**
+     * @constructor
+     * 
+     * @param {string} date 
+     * @param {string} title 
+     * @param {string} desc 
+     * @param {string} person 
+     * @param {number} id 
+     */
+    constructor(date, title, desc, person, id) {
+        this.date = date;
+        this.title = title;
+        this.desc = desc;
+        this.person = person;
+        this.id = id;
+    }
 }
 
 
