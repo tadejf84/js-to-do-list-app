@@ -206,11 +206,11 @@ class Store {
      */
     static moveTaskToArchive(id) {
         let tasks = Store.getTasks();
-               tasks = Store.orderByDate(tasks);
         let archived = Store.getTasksFromArchive();
         tasks.forEach((task) => {
             if (task.id == id) {
                 archived.push(task);
+                archived = Store.orderByDate(archived);
                 localStorage.setItem('archive', JSON.stringify(archived));
                 TaskUI.addTask(task, archiveList);
             }
@@ -252,16 +252,19 @@ class Store {
 
     /**
      * Get task after Id
-     * 
      * To insert new task in correct spot
+     * 
+     * @param {string} id
+     * 
+     * @returns {string} task after id
      */
     static getTaskAfterId(id) {
         const tasks = Store.getTasks();
         if(tasks.length === 0) return null;
-        const currentTaskIndex = tasks.findIndex(task => task.id === id);
-        if((currentTaskIndex + 1) !== tasks.length) {
-            const currentTaskId = tasks[currentTaskIndex + 1].id;
-            return currentTaskId;
+        const taskAfterIndex = tasks.findIndex(task => task.id === id);
+        if((taskAfterIndex + 1) !== tasks.length) {
+            const taskAfterId = tasks[taskAfterIndex + 1].id;
+            return taskAfterId;
         } else {
             return null;
         }
