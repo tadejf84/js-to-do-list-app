@@ -119,15 +119,14 @@ class TaskUI {
  */
 class Store {
 
-	/**
-	 * Get active tasks from storage
-	 * 
-	 * @returns {object} tasks
-	 */
-	static getTasks() {
-		return JSON.parse(localStorage.getItem('tasks')) ?? [];
-	}
-
+    /**
+     * Get active tasks from storage
+     * 
+     * @returns {object} tasks
+     */
+    static getTasks() {
+        return JSON.parse(localStorage.getItem('tasks')) ?? [];
+    }
 
 	/**
 	 * Get archived tasks from storage
@@ -138,84 +137,82 @@ class Store {
 		return JSON.parse(localStorage.getItem('archive')) ?? [];
 	}
 
+    /**
+     * Add task to storage
+     * 
+     * @param {object} task 
+     */
+    static addTasks(task) {
+        let tasks = Store.getTasks();
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 
-	/**
-	 * Add task to storage
-	 * 
-	 * @param {object} task 
-	 */
-	static addTasks(task) {
-		let tasks = Store.getTasks();
-		tasks.push(task);
-		localStorage.setItem('tasks', JSON.stringify(tasks));
-	}
+    /**
+     * Remove task from storage
+     * 
+     * @param {string} id 
+     */
+    static removeTask(id) {
+        let tasks = Store.getTasks();
+        tasks.forEach((task, index) => {
+            if (task.id == id) tasks.splice(index, 1);
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
 
+    /**
+     * Remove task from archive
+     * 
+     * @param {string} id 
+     */
+    static removeTaskFromArchive(id) {
+        let archived = Store.getTasksFromArchive();
+        archived.forEach((task, index) => {
+            if (task.id == id) {
+                archived.splice(index, 1);
+            }
+        });
+        localStorage.setItem('archive', JSON.stringify(archived));
+    }
 
-	/**
-	 * Remove task from storage
-	 * 
-	 * @param {string} id 
-	 */
-	static removeTask(id) {
-		let tasks = Store.getTasks();
-		tasks.forEach((task, index) => {
-			if (task.id == id) tasks.splice(index, 1);
-		});
-		localStorage.setItem('tasks', JSON.stringify(tasks));
-	}
+    /**
+     * Move task to archive
+     * 
+     * @param {string} id 
+     */
+    static moveTaskToArchive(id) {
+        let tasks = Store.getTasks();
+        let archived = Store.getTasksFromArchive();
+        tasks.forEach((task) => {
+            if (task.id == id) {
+                archived.push(task);
+                localStorage.setItem('archive', JSON.stringify(archived));
+                TaskUI.addTask(task, archiveList);
+            }
+        });
+    }
 
-	// remove tasks from archive storage
-	static removeTaskFromArchive(id) {
-		let archived = Store.getTasksFromArchive();
-		archived.forEach((task, index) => {
-			if (task.id == id) {
-				archived.splice(index, 1);
-			}
-		});
-		localStorage.setItem('archive', JSON.stringify(archived));
-	}
+    /**
+     * Set id of the last task in storage
+     * 
+     * @param {string} id 
+     */
+    static setLastID(id) {
+        localStorage.setItem('taskID', JSON.stringify(id));
+    }
 
-
-	/**
-	 * Move task to archive
-	 * 
-	 * @param {string} id 
-	 */
-	static moveTaskToArchive(id) {
-		let tasks = Store.getTasks();
-		let archived = Store.getTasksFromArchive();
-		tasks.forEach((task) => {
-			if (task.id == id) {
-				archived.push(task);
-				localStorage.setItem('archive', JSON.stringify(archived));
-				TaskUI.addTask(task, archiveList);
-			}
-		});
-	}
-
-
-	/**
-	 * Set id of the last task in storage
-	 * 
-	 * @param {string} id 
-	 */
-	static setLastID(id) {
-		localStorage.setItem('taskID', JSON.stringify(id));
-	}
-
-
-	/**
-	 * Get last task id
-	 * 
-	 * @returns {string} id
-	 */
-	static getLastID() {
-		return JSON.parse(localStorage.getItem('taskID'));
-	}
+    /**
+     * Get last task id
+     * 
+     * @returns {string} id
+     */
+    static getLastID() {
+        return JSON.parse(localStorage.getItem('taskID'));
+    }
 }
 
-
-// show all data on load
+// Show all data on load
 document.addEventListener('DOMContentLoaded', TaskUI.displayListsOnInit);
 
 // add task to list on click
