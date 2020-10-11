@@ -217,85 +217,85 @@ document.addEventListener('DOMContentLoaded', TaskUI.displayListsOnInit);
 
 // Add task to list on click
 form.addEventListener('submit', (e) => {
-	e.preventDefault();
+    e.preventDefault();
 
-	// Get last task ID from storage
-	let currentTaskID = (+Store.getLastID() + 1) ?? 0;
+    // Get last task ID from storage
+    let currentTaskID = (+Store.getLastID() + 1) ?? 0;
 
-	// Get values from form inputs
-	const dateVal = document.querySelector('#date').value;
-	const titleVal = document.querySelector('#title').value;
-	const descVal = document.querySelector('#desc').value;
-	const personVal = document.querySelector('#person').value;
+    // Get values from form inputs
+    const dateVal = document.querySelector('#date').value;
+    const titleVal = document.querySelector('#title').value;
+    const descVal = document.querySelector('#desc').value;
+    const personVal = document.querySelector('#person').value;
 
-	// Input validation
-	if (!dateVal || !titleVal || !descVal || !personVal) {
-		TaskUI.showAlert('Please fill all fields!', 'error');
-	} else {
-		// New task instance
-		const task = new Task(dateVal, titleVal, descVal, personVal, currentTaskID);
+    // Input validation
+    if (!dateVal || !titleVal || !descVal || !personVal) {
+        TaskUI.showAlert('Please fill all fields!', 'error');
+    } else {
+        // New task instance
+        const task = new Task(dateVal, titleVal, descVal, personVal, currentTaskID);
 
-		// Add to UI
-		TaskUI.addTask(task, list);
+        // Add to UI
+        TaskUI.addTask(task, list);
 
-		// Add task to storage
-		Store.addTasks(task);
+        // Add task to storage
+        Store.addTasks(task);
 
-		// Clear fields
-		TaskUI.clearFields();
+        // Clear fields
+        TaskUI.clearFields();
 
-		// Show success message
-		TaskUI.showAlert('Task added successfully!', 'success');
+        // Show success message
+        TaskUI.showAlert('Task added successfully!', 'success');
 
-		// Increase task ID
-		Store.setLastID(currentTaskID);
-		currentTaskID++;
-	}
+        // Increase task ID
+        Store.setLastID(currentTaskID);
+        currentTaskID++;
+    }
 });
 
 // Remove a task from to-do list or move it to archive on click
 list.addEventListener('click', (e) => {
-	const parent = e.target.parentElement;
-	const taskID = parent.parentElement.getAttribute('data-id');
+    const parent = e.target.parentElement;
+    const taskID = parent.parentElement.getAttribute('data-id');
 
-	if (e.target.classList.contains('btn-delete')) {
+    if (e.target.classList.contains('btn-delete')) {
 
-		// Delete task from UI
-		TaskUI.deleteTask(e.target, 'btn-delete');
+        // Delete task from UI
+        TaskUI.deleteTask(e.target, 'btn-delete');
 
-		// Delete task from storage
-		Store.removeTask(taskID);
+        // Delete task from storage
+        Store.removeTask(taskID);
 
-		// Show success message
-		TaskUI.showAlert('Task removed successfully!', 'success');
+        // Show success message
+        TaskUI.showAlert('Task removed successfully!', 'success');
 
-	} else if (e.target.classList.contains('btn-archive')) {
+    } else if (e.target.classList.contains('btn-archive')) {
 
-		// Delete task from UI
-		TaskUI.deleteTask(e.target, 'btn-archive');
+        // Delete task from UI
+        TaskUI.deleteTask(e.target, 'btn-archive');
 
-		// Move task to archive storage
-		Store.moveTaskToArchive(taskID);
+        // Move task to archive storage
+        Store.moveTaskToArchive(taskID);
 
-		// Delete task from active tasks storage
-		Store.removeTask(taskID);
+        // Delete task from active tasks storage
+        Store.removeTask(taskID);
 
-		// Show success message
-		TaskUI.showAlert('Task completed!', 'success');
-	}
+        // Show success message
+        TaskUI.showAlert('Task completed!', 'success');
+    }
 });
 
 // Remove task from archive on click
 archiveList.addEventListener('click', (e) => {
-	const parent = e.target.parentElement;
-	const taskID = parent.parentElement.getAttribute('data-id');
+    const parent = e.target.parentElement;
+    const taskID = parent.parentElement.getAttribute('data-id');
 
-	// Delete task from archive UI
-	TaskUI.deleteTask(e.target, 'btn-delete-archive');
+    // Delete task from archive UI
+    TaskUI.deleteTask(e.target, 'btn-delete-archive');
 
-	// Delete task from storage
-	Store.removeTaskFromArchive(taskID);
+    // Delete task from storage
+    Store.removeTaskFromArchive(taskID);
 
-	// Show success message
-	TaskUI.showAlert('Task removed successfully!', 'success');
+    // Show success message
+    TaskUI.showAlert('Task removed successfully!', 'success');
 });
