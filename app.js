@@ -128,14 +128,14 @@ class Store {
         return JSON.parse(localStorage.getItem('tasks')) ?? [];
     }
 
-	/**
-	 * Get archived tasks from storage
-	 * 
-	 * @returns {object} tasks
-	 */
-	static getTasksFromArchive() {
-		return JSON.parse(localStorage.getItem('archive')) ?? [];
-	}
+    /**
+     * Get archived tasks from storage
+     * 
+     * @returns {object} tasks
+     */
+    static getTasksFromArchive() {
+        return JSON.parse(localStorage.getItem('archive')) ?? [];
+    }
 
     /**
      * Add task to storage
