@@ -215,11 +215,11 @@ class Store {
 // Show all data on load
 document.addEventListener('DOMContentLoaded', TaskUI.displayListsOnInit);
 
-// add task to list on click
+// Add task to list on click
 form.addEventListener('submit', (e) => {
 	e.preventDefault();
 
-	// get last task ID from storage
+	// Get last task ID from storage
 	let currentTaskID = (+Store.getLastID() + 1) ?? 0;
 
 	// Get values from form inputs
@@ -253,7 +253,7 @@ form.addEventListener('submit', (e) => {
 	}
 });
 
-// remove a task from to-do list or move it to archive on click
+// Remove a task from to-do list or move it to archive on click
 list.addEventListener('click', (e) => {
 	const parent = e.target.parentElement;
 	const taskID = parent.parentElement.getAttribute('data-id');
@@ -285,7 +285,7 @@ list.addEventListener('click', (e) => {
 	}
 });
 
-// remove task from archive on click
+// Remove task from archive on click
 archiveList.addEventListener('click', (e) => {
 	const parent = e.target.parentElement;
 	const taskID = parent.parentElement.getAttribute('data-id');
